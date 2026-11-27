@@ -5,6 +5,8 @@ import java.io.Reader;
 import java.util.Locale;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 
 public class BigramModel {
     public static final int MAX_VOCABULARY_SIZE = 14500;
@@ -131,7 +133,23 @@ public class BigramModel {
      * @pre: fileName is a legal file path
      */
     public void saveModel(String fileName) throws IOException { // Question 3
-        // TODO: implement
+        BufferedWriter vocWriter = new BufferedWriter(new FileWriter(fileName + VOC_FILE_SUFFIX));
+        vocWriter.write(mVocabulary.length + " words\n");
+        for (int i = 0; i < mVocabulary.length; i++){
+            vocWriter.write(i + "," + mVocabulary[i] + "\n");
+        }
+        vocWriter.close();
+
+        BufferedWriter countsWriter = new BufferedWriter(new FileWriter(fileName + COUNTS_FILE_SUFFIX));
+        for (int k = 0; k < mBigramCounts.length; k++){
+            for (int j = 0; j < mBigramCounts[k].length; j++) {
+                int count = mBigramCounts[k][j];
+                if (count != 0){
+                    countsWriter.write(k + "," + j + ":" + count + "\n");
+                }
+            }
+        }
+        countsWriter.close();
     }
 
     /*
