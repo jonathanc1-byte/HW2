@@ -1,6 +1,7 @@
 package il.ac.tau.cs.software1.bigram;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Locale;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -86,7 +87,7 @@ public class BigramModel {
         BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line;
         while ((line = br.readLine()) != null){
-            String[] tokens = line.split("\\s");
+            String[] tokens = line.split("\\s+");
             for (String token : tokens){
                 String word = normalizeWord(token);
                 if (word != null && count < MAX_VOCABULARY_SIZE && findIndex(temp, word) == ELEMENT_NOT_FOUND){
@@ -108,8 +109,21 @@ public class BigramModel {
      * @post: mBigramCounts = prev(mBigramCounts)
      */
     public int[][] buildCountsArray(String fileName, String[] vocabulary) throws IOException { // Question 2
-        // TODO: implement
-        return null;
+        int[][] table = new int [vocabulary.length][vocabulary.length];
+        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+        String line;
+        while ((line = reader.readLine()) != null){
+            String[] tokens = line.split("\\s+");
+            for (int i = 0; i < tokens.length - 1; i++){
+                int j = findIndex(vocabulary, normalizeWord(tokens[i]));
+                int k = findIndex(vocabulary, normalizeWord(tokens[i+1]));
+                if (j != ELEMENT_NOT_FOUND && k != ELEMENT_NOT_FOUND){
+                    table[j][k]++;
+                }
+            }
+        }
+        reader.close();
+        return table;
     }
 
     /*
