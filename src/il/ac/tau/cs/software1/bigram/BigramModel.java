@@ -2,6 +2,8 @@ package il.ac.tau.cs.software1.bigram;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class BigramModel {
     public static final int MAX_VOCABULARY_SIZE = 14500;
@@ -79,8 +81,26 @@ public class BigramModel {
      * @post: mBigramCounts = prev(mBigramCounts)
      */
     public String[] buildVocabularyIndex(String fileName) throws IOException { // Question 1
-        // TODO: implement
-        return null;
+        String[] temp = new String[MAX_VOCABULARY_SIZE];
+        int count = 0;
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        String line;
+        while ((line = br.readLine()) != null){
+            String[] tokens = line.split("\\s");
+            for (String token : tokens){
+                String word = normalizeWord(token);
+                if (word != null && count < MAX_VOCABULARY_SIZE && findIndex(temp, token) == ELEMENT_NOT_FOUND){
+                    temp[count] = word;
+                    count++;
+                }
+            }
+        }
+        br.close();
+        String[] final_list = new String[count];
+        for (int i = 0; i < count; i++){
+            final_list[i] = temp[i];
+        }
+        return final_list;
     }
 
     /*
