@@ -89,7 +89,7 @@ public class BigramModel {
             String[] tokens = line.split("\\s");
             for (String token : tokens){
                 String word = normalizeWord(token);
-                if (word != null && count < MAX_VOCABULARY_SIZE && findIndex(temp, token) == ELEMENT_NOT_FOUND){
+                if (word != null && count < MAX_VOCABULARY_SIZE && findIndex(temp, word) == ELEMENT_NOT_FOUND){
                     temp[count] = word;
                     count++;
                 }
