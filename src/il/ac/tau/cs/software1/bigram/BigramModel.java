@@ -156,7 +156,27 @@ public class BigramModel {
      * @pre: fileName is a legal file path
      */
     public void loadModel(String fileName) throws IOException { // Question 4
-        // TODO: implement
+        BufferedReader vocReader = new BufferedReader(new FileReader(fileName + VOC_FILE_SUFFIX));
+        String firstLine = vocReader.readLine();
+        int size = Integer.parseInt(firstLine.split(" ")[0]);
+        String[] voc = new String[size];
+        
+        String line;
+        while ((line = vocReader.readLine()) != null){
+            String[] parts = line.split(",", 2);
+            voc[Integer.parseInt(parts[0])] = parts[1];
+        }
+        vocReader.close();
+        int[][] table = new int[size][size];
+        BufferedReader countsReader = new BufferedReader(new FileReader(fileName + COUNTS_FILE_SUFFIX));
+        while ((line = countsReader.readLine()) != null){
+            String[] sides = line.split(":");
+            String[] coordinates = sides[0].split(",");
+            table[Integer.parseInt(coordinates[0])][Integer.parseInt(coordinates[1])] = Integer.parseInt(sides[1]);
+        }    
+        countsReader.close();
+        mVocabulary = voc;
+        mBigramCounts = table;
     }
 
     /*
